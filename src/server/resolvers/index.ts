@@ -1,5 +1,5 @@
 import fetch from 'cross-fetch'
-import { IPrint } from '../../public/queries/prints'
+import { IPrint, IFeedVariables, IFeedData } from '../../public/queries/feed'
 
 interface ResponseData {
   records: {
@@ -14,19 +14,23 @@ const apiPath = 'https://api.harvardartmuseums.org/object'
 
 export default {
   Query: {
-    prints: async () => {
-      const url = `${apiPath}?classification=Prints&apikey=${process.env.HARVARD_ART_API_KEY}`
+    feed: async (_parent: any, args: IFeedVariables): Promise<IFeedData['feed']> => {
+      const url = `${apiPath}?classification=Prints&apikey=${process.env.HARVARD_ART_API_KEY}&page=${args.page}`
+
       const response = await fetch(url)
       const data: ResponseData = await response.json()
 
       const prints: IPrint[] = data.records.map(({ id, title, primaryimageurl, description }) => ({
         id,
         title,
-        description,
-        imageUrl: primaryimageurl,
+        description: description ?? '',
+        imageUrl: primaryimageurl ?? '',
       }))
 
-      return prints
+      return {
+        page: args.page,
+        prints,
+      }
     },
   },
 }

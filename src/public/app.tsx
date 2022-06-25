@@ -6,9 +6,27 @@ import theme from './styles/theme'
 import Header from './components/header'
 import HomePage from './pages/home'
 
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        feed: {
+          keyArgs: false,
+          merge(existing, incoming) {
+            return {
+              ...incoming,
+              prints: [...(existing?.prints || []), ...(incoming?.prints || [])],
+            }
+          },
+        },
+      },
+    },
+  },
+})
+
 const client = new ApolloClient({
   link: new HttpLink({ uri: '/graphql', fetch }),
-  cache: new InMemoryCache(),
+  cache,
 })
 
 const App = () => (
