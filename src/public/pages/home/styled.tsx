@@ -11,3 +11,9 @@ export const StyledGrid = styled.div`
   gap: ${(props) => props.theme.spacers.xl};
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 `
+
+export const StyledErrorMessage = styled.p`
+  font-size: 16px;
+  text-align: center;
+  color: ${(props) => props.theme.colors.red};
+`

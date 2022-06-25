@@ -1,16 +1,34 @@
+import 'dotenv/config'
 import { createServer } from 'http'
-import { AddressInfo } from 'net'
 import express from 'express'
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core'
+import { ApolloServer } from 'apollo-server-express'
 import router from './router'
+import typeDefs from './schema'
+import resolvers from './resolvers'
 
-const app = express()
-const server = createServer(app)
+const start = async () => {
+  const app = express()
+  const httpServer = createServer(app)
 
-app.use(router())
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    csrfPrevention: true,
+    cache: 'bounded',
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  })
 
-server.listen(3000, () => {
-  const { port } = server.address() as AddressInfo
+  await server.start()
 
-  // eslint-disable-next-line no-console
-  console.log(`server running on ${port}`)
-})
+  server.applyMiddleware({ app })
+
+  app.use(router())
+  app.use(express.static('build/public'))
+
+  app.listen({ port: 3000 }, () => {
+    console.log(`🚀 Server ready at http://localhost:3000${server.graphqlPath}`)
+  })
+}
+
+start()

@@ -11,7 +11,7 @@ interface ICard {
 const Card = ({ title, imageUrl, description }: ICard) => (
   <StyledWrapper>
     <Heading level={2}>{title}</Heading>
-    <Flex justify="center">
+    <Flex flex={1} align="flex-start" justify="center">
       <StyledImage src={imageUrl} />
     </Flex>
     <StyledDescription>{description}</StyledDescription>

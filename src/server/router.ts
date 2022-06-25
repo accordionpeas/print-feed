@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import homePageController from './controllers/pages/home'
+import homePageController from './controllers/home'
 
 export default () => {
   const router = Router()
