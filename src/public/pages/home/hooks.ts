@@ -9,6 +9,7 @@ interface IUseInfiniteScroll {
 }
 
 export const useInfiniteScroll = ({ currentPage, loading, error, fetchMore }: IUseInfiniteScroll) => {
+  // use as ref at bottom of component tree
   const loadMoreTarget = useRef<HTMLDivElement | null>(null)
 
   const callback = useCallback(
@@ -31,6 +32,7 @@ export const useInfiniteScroll = ({ currentPage, loading, error, fetchMore }: IU
 
   useEffect(() => {
     if (observerRef.current) {
+      // disconnect so that the callback does not fire multiple times
       observerRef.current.disconnect()
     }
 
