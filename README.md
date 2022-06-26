@@ -11,3 +11,9 @@
 - `npm run build`
 - `npm start`
 - visit `http://localhost:3000`
+
+## Tests
+- `npm test`
+
+## Visual Tests
+- `npm run test:debug`

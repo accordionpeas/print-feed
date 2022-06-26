@@ -4,10 +4,11 @@ import { IFeedVariables } from '../../queries/feed'
 interface IUseInfiniteScroll {
   currentPage: number
   loading: boolean
+  error: boolean
   fetchMore: (args: { variables: IFeedVariables }) => void
 }
 
-export const useInfiniteScroll = ({ currentPage, loading, fetchMore }: IUseInfiniteScroll) => {
+export const useInfiniteScroll = ({ currentPage, loading, error, fetchMore }: IUseInfiniteScroll) => {
   const loadMoreTarget = useRef<HTMLDivElement | null>(null)
 
   const callback = useCallback(
@@ -15,7 +16,7 @@ export const useInfiniteScroll = ({ currentPage, loading, fetchMore }: IUseInfin
       const isIntersecting = entries[0]?.isIntersecting
       const shouldLoadMore = isIntersecting && !loading
 
-      if (shouldLoadMore) {
+      if (shouldLoadMore && !error) {
         fetchMore({
           variables: {
             page: currentPage + 1,
@@ -23,7 +24,7 @@ export const useInfiniteScroll = ({ currentPage, loading, fetchMore }: IUseInfin
         })
       }
     },
-    [currentPage, loading]
+    [currentPage, loading, error]
   )
 
   const observerRef = useRef<IntersectionObserver>()

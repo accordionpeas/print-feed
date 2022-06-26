@@ -21,5 +21,6 @@ export const StyledDescription = styled.p`
 
 export const StyledImage = styled.img`
   max-width: 200px;
+  min-height: 200px;
   margin: 0 0 ${(props) => props.theme.spacers.large};
 `

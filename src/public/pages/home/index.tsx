@@ -16,7 +16,7 @@ const Home = () => {
 
   const currentPage = data?.feed.page ?? 0
 
-  const loadMoreTarget = useInfiniteScroll({ currentPage, loading, fetchMore })
+  const loadMoreTarget = useInfiniteScroll({ currentPage, loading, error: !!error, fetchMore })
 
   return (
     <>

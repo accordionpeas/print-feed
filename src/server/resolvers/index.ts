@@ -1,5 +1,4 @@
-import fetch from 'cross-fetch'
-import qs from 'qs'
+import fetch from '../utils/fetch'
 import { IPrint, IFeedVariables, IFeedData } from '../../public/queries/feed'
 
 interface ResponseData {
@@ -18,7 +17,7 @@ export default {
     feed: async (_parent: any, args: IFeedVariables): Promise<IFeedData['feed']> => {
       const { page } = args
 
-      const query = qs.stringify({
+      const data: ResponseData = await fetch(apiPath, {
         classification: 'Prints',
         apikey: process.env.HARVARD_ART_API_KEY,
         size: 10,
@@ -28,12 +27,6 @@ export default {
         q: 'verificationlevel: 4',
         page,
       })
-
-      const url = `${apiPath}?${query}`
-
-      const response = await fetch(url)
-
-      const data: ResponseData = await response.json()
 
       const prints: IPrint[] = data.records.map(({ id, title, primaryimageurl, description }) => ({
         id,
